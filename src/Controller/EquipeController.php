@@ -13,7 +13,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/equipe')]
@@ -72,22 +71,6 @@ final class EquipeController extends AbstractController
                 }
             }
 
-            try {
-                $pokemonData = $pokemonApiService->getPokemon($pokemonId);
-            } catch (NotFoundHttpException) {
-                $this->addFlash('warning', sprintf('Le Pokémon #%d est introuvable.', $pokemonId));
-
-                return $this->redirectToRoute('equipe.index');
-            } catch (\RuntimeException) {
-                $this->addFlash('danger', 'Impossible de récupérer les informations du Pokémon pour le moment.');
-
-                return $this->redirectToRoute('equipe.index');
-            }
-
-            $sprite = $pokemonData['sprites']['other']['official-artwork']['front_default']
-                ?? $pokemonData['sprites']['front_default']
-                ?? PokemonApiService::buildOfficialArtworkUrl($pokemonId)
-                ?? PokemonApiService::placeholderSprite($pokemonId);
 
             $pokemonEquipe
                 ->setPokemonName($pokemonData['name'] ?? 'Inconnu')

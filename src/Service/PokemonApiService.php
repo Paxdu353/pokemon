@@ -37,7 +37,7 @@ final class PokemonApiService
         } catch (ClientExceptionInterface|RedirectionExceptionInterface|ServerExceptionInterface|TransportExceptionInterface|DecodingExceptionInterface $exception) {
             throw new \RuntimeException('Unable to contact PokéAPI.', previous: $exception);
         }
-
+      
         $results = $payload['results'] ?? [];
 
         return array_map(static function (array $pokemon): array {
@@ -46,7 +46,7 @@ final class PokemonApiService
             return [
                 'id' => $id,
                 'name' => $pokemon['name'] ?? 'Unknown',
-                'image' => self::buildOfficialArtworkUrl($id) ?? self::placeholderSprite($id),
+
             ];
         }, $results);
     }
@@ -86,13 +86,6 @@ final class PokemonApiService
         }
 
         return sprintf('https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/%d.png', $pokemonId);
-    }
-
-    public static function placeholderSprite(?int $pokemonId = null): string
-    {
-        $label = null === $pokemonId ? 'Pokemon' : sprintf('Pokemon #%d', $pokemonId);
-
-        return sprintf('https://via.placeholder.com/200x200?text=%s', rawurlencode($label));
     }
 
     private static function extractIdFromUrl(?string $url): ?int

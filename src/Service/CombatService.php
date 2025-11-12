@@ -4,7 +4,6 @@ namespace App\Service;
 
 use App\Entity\Equipe;
 use App\Entity\PokemonEquipe;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 final class CombatService
 {
@@ -26,9 +25,6 @@ final class CombatService
             static fn (PokemonEquipe $pokemon) => [
                 'id' => $pokemon->getPokemonId(),
                 'name' => $pokemon->getPokemonName(),
-                'sprite' => $pokemon->getSprite()
-                    ?? PokemonApiService::buildOfficialArtworkUrl($pokemon->getPokemonId())
-                    ?? PokemonApiService::placeholderSprite($pokemon->getPokemonId()),
                 'hp' => $pokemon->getHp(),
                 'attack' => $pokemon->getAttack(),
                 'defense' => $pokemon->getDefense(),
@@ -143,12 +139,7 @@ final class CombatService
 
         for ($i = 0; $i < $size; ++$i) {
             $id = random_int(1, 151);
-            try {
-                $data = $this->pokemonApiService->getPokemon($id);
-                $team[] = $this->normalizeOpponentData($data, $id);
-            } catch (NotFoundHttpException|\RuntimeException) {
-                $team[] = $this->buildFallbackOpponent($id);
-            }
+
         }
 
         return $team;
@@ -168,46 +159,4 @@ final class CombatService
         return 0;
     }
 
-    /**
-     * @param array<string, mixed> $data
-     *
-     * @return array<string, mixed>
-     */
-    private function normalizeOpponentData(array $data, int $fallbackId): array
-    {
-        $hp = $this->extractStat($data, 'hp');
-
-        return [
-            'id' => (int) ($data['id'] ?? $fallbackId),
-            'name' => $data['name'] ?? sprintf('mystère #%d', $fallbackId),
-            'sprite' => $data['sprites']['other']['official-artwork']['front_default']
-                ?? $data['sprites']['front_default']
-                ?? PokemonApiService::buildOfficialArtworkUrl($fallbackId)
-                ?? PokemonApiService::placeholderSprite($fallbackId),
-            'hp' => $hp,
-            'attack' => $this->extractStat($data, 'attack'),
-            'defense' => $this->extractStat($data, 'defense'),
-            'speed' => $this->extractStat($data, 'speed'),
-            'currentHp' => $hp,
-            'surnom' => null,
-        ];
-    }
-
-    /**
-     * @return array<string, mixed>
-     */
-    private function buildFallbackOpponent(int $id): array
-    {
-        return [
-            'id' => $id,
-            'name' => sprintf('mystère #%d', $id),
-            'sprite' => PokemonApiService::placeholderSprite($id),
-            'hp' => 50,
-            'attack' => 50,
-            'defense' => 50,
-            'speed' => 50,
-            'currentHp' => 50,
-            'surnom' => null,
-        ];
-    }
 }
