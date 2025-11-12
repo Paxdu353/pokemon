@@ -1,0 +1,83 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Combat Pokémon{% endblock %}
+
+{% block body %}
+        <div class="row justify-content-center">
+                <div class="col-lg-10">
+                        <h1 class="mb-4 text-center">Simulation de combat</h1>
+
+                        {% if not equipe %}
+                                <div class="alert alert-info text-center">
+                                        Vous n'avez pas encore d'équipe. <a href="{{ path('equipe.index') }}">Créez-en une</a> pour lancer un combat.
+                                </div>
+                        {% else %}
+                                <div class="card mb-4 shadow-sm">
+                                        <div class="card-body">
+                                                <h2 class="h5 text-center mb-3">Votre équipe</h2>
+                                                {% if equipe.pokemonEquipes is empty %}
+                                                        <p class="text-center text-muted">Ajoutez des Pokémon avant de vous lancer dans un combat.</p>
+                                                {% else %}
+                                                        <div class="row row-cols-1 row-cols-md-3 g-3">
+                                                                {% for pokemon in equipe.pokemonEquipes %}
+                                                                        <div class="col">
+                                                                                <div class="card h-100 text-center">
+                                                                                        <div class="card-body">
+                                                                                                <img src="{{ pokemon.sprite }}" alt="{{ pokemon.pokemonName }}" class="img-fluid mb-2" style="max-height: 120px;" loading="lazy">
+                                                                                                <h3 class="h6 text-capitalize">{{ pokemon.surnom ?: pokemon.pokemonName }}</h3>
+                                                                                                <small class="text-muted">PV {{ pokemon.hp }} | ATK {{ pokemon.attack }} | DEF {{ pokemon.defense }} | VIT {{ pokemon.speed }}</small>
+                                                                                        </div>
+                                                                                </div>
+                                                                        </div>
+                                                                {% endfor %}
+                                                        </div>
+                                                {% endif %}
+                                        </div>
+                                </div>
+
+                                <form method="post" action="{{ path('combat.index') }}" class="text-center mb-4">
+                                        <button class="btn btn-danger btn-lg" type="submit" {% if equipe.pokemonEquipes is empty %}disabled{% endif %}>Lancer le combat</button>
+                                </form>
+
+                                {% if result %}
+                                        <div class="card mb-4 shadow-sm">
+                                                <div class="card-body">
+                                                        <h2 class="h5 text-center mb-3">Équipe adverse</h2>
+                                                        <div class="row row-cols-1 row-cols-md-3 g-3">
+                                                                {% for opponent in result.opponentTeam %}
+                                                                        <div class="col">
+                                                                                <div class="card h-100 text-center">
+                                                                                        <div class="card-body">
+                                                                                                <img src="{{ opponent.sprite }}" alt="{{ opponent.name }}" class="img-fluid mb-2" style="max-height: 120px;" loading="lazy">
+                                                                                                <h3 class="h6 text-capitalize">{{ opponent.name }}</h3>
+                                                                                                <small class="text-muted">PV {{ opponent.hp }} | ATK {{ opponent.attack }} | DEF {{ opponent.defense }} | VIT {{ opponent.speed }}</small>
+                                                                                        </div>
+                                                                                </div>
+                                                                        </div>
+                                                                {% endfor %}
+                                                        </div>
+                                                </div>
+                                        </div>
+
+                                        <div class="card shadow-sm">
+                                                <div class="card-body">
+                                                        <h2 class="h5 mb-3">Déroulement du combat</h2>
+                                                        <ul class="list-group list-group-flush">
+                                                                {% for log in result.rounds %}
+                                                                        <li class="list-group-item">{{ log }}</li>
+                                                                {% endfor %}
+                                                        </ul>
+                                                        <div class="alert alert-{{ result.winner == 'joueur' ? 'success' : 'danger' }} mt-3 text-center">
+                                                                {% if result.winner == 'joueur' %}
+                                                                        Victoire ! Félicitations, votre équipe a triomphé.
+                                                                {% else %}
+                                                                        Défaite... retentez votre chance après quelques ajustements.
+                                                                {% endif %}
+                                                        </div>
+                                                </div>
+                                        </div>
+                                {% endif %}
+                        {% endif %}
+                </div>
+        </div>
+{% endblock %}
