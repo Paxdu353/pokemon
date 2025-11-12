@@ -37,7 +37,7 @@ final class PokemonApiService
         } catch (ClientExceptionInterface|RedirectionExceptionInterface|ServerExceptionInterface|TransportExceptionInterface|DecodingExceptionInterface $exception) {
             throw new \RuntimeException('Unable to contact PokéAPI.', previous: $exception);
         }
-
+      
         $results = $payload['results'] ?? [];
 
         return array_map(static function (array $pokemon): array {
@@ -46,7 +46,7 @@ final class PokemonApiService
             return [
                 'id' => $id,
                 'name' => $pokemon['name'] ?? 'Unknown',
-                'image' => self::buildOfficialArtworkUrl($id),
+
             ];
         }, $results);
     }

@@ -25,7 +25,6 @@ final class CombatService
             static fn (PokemonEquipe $pokemon) => [
                 'id' => $pokemon->getPokemonId(),
                 'name' => $pokemon->getPokemonName(),
-                'sprite' => $pokemon->getSprite(),
                 'hp' => $pokemon->getHp(),
                 'attack' => $pokemon->getAttack(),
                 'defense' => $pokemon->getDefense(),
@@ -140,21 +139,7 @@ final class CombatService
 
         for ($i = 0; $i < $size; ++$i) {
             $id = random_int(1, 151);
-            $data = $this->pokemonApiService->getPokemon($id);
 
-            $team[] = [
-                'id' => $data['id'] ?? $id,
-                'name' => $data['name'] ?? 'mystère',
-                'sprite' => $data['sprites']['other']['official-artwork']['front_default']
-                    ?? $data['sprites']['front_default']
-                    ?? PokemonApiService::buildOfficialArtworkUrl($id),
-                'hp' => $this->extractStat($data, 'hp'),
-                'attack' => $this->extractStat($data, 'attack'),
-                'defense' => $this->extractStat($data, 'defense'),
-                'speed' => $this->extractStat($data, 'speed'),
-                'currentHp' => $this->extractStat($data, 'hp'),
-                'surnom' => null,
-            ];
         }
 
         return $team;
@@ -173,4 +158,5 @@ final class CombatService
 
         return 0;
     }
+
 }

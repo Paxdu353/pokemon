@@ -65,14 +65,6 @@ final class PokedexController extends AbstractController
             $id = $this->extractIdFromUrl($pokemon['url']);
         }
 
-        if (isset($pokemon['sprites']['other']['official-artwork']['front_default'])) {
-            $image = $pokemon['sprites']['other']['official-artwork']['front_default'];
-        } else {
-            $image = PokemonApiService::buildOfficialArtworkUrl(is_int($id) ? $id : null);
-        }
-
-        return [
-            'id' => $id,
             'name' => $pokemon['name'] ?? 'Unknown',
             'image' => $image,
             'types' => $pokemon['types'] ?? [],

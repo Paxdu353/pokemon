@@ -71,11 +71,6 @@ final class EquipeController extends AbstractController
                 }
             }
 
-            $pokemonData = $pokemonApiService->getPokemon($pokemonId);
-
-            $sprite = $pokemonData['sprites']['other']['official-artwork']['front_default']
-                ?? $pokemonData['sprites']['front_default']
-                ?? PokemonApiService::buildOfficialArtworkUrl($pokemonId);
 
             $pokemonEquipe
                 ->setPokemonName($pokemonData['name'] ?? 'Inconnu')
