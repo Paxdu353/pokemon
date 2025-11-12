@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello AuthorController!{% endblock %}
+
+{% block body %}
+    <h1>Liste des auteurs</h1>
+
+    <ul>
+        {% for author in authors %}
+            <li>
+                <a href="{{ path('author.show', { 'id': author.id }) }}">{{ author.name }}</a>
+            </li>
+        {% else %}
+            <li>Aucun auteur trouvé.</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

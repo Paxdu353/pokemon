@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Article :
+	{{ post.title }}
+{% endblock %}
+
+{% block body %}
+	<div>
+		<h1>Édition de l'article {{ post.title }}</h1>
+		<div>
+			{{ form_start(form) }}
+			<div class="row">
+				<div class="col-md-6 mb-3">
+					{{ form_row(form.title) }}
+				</div>
+				<div class="col-md-6 mb-3">
+					{{ form_row(form.author) }}
+				</div>
+			
+			{{ form_end(form) }}
+	</div>
+{% endblock %}
