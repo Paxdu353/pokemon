@@ -1,15 +1,45 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello {{ name }}!{% endblock %}
+{% block title %}Bienvenue dans le Pokédex Symfony{% endblock %}
 
 {% block body %}
-<div class="container mt-5">
-    <div class="row">
-        <div class="col-md-12">
-            <h1 class="mb-4">Hello {{ name }}!</h1>
-            <p class="lead">Welcome to our Symfony application.</p>
-            
+        <div class="text-center py-5">
+                <h1 class="display-5 fw-bold mb-3">Attrapez-les tous avec Symfony !</h1>
+                <p class="lead mb-4">Explorez le Pokédex, composez votre équipe de rêve et affrontez des adversaires dans des combats au tour par tour.</p>
+                <div class="d-flex justify-content-center gap-3">
+                        <a class="btn btn-primary btn-lg" href="{{ path('pokedex.index') }}">Découvrir le Pokédex</a>
+                        {% if app.user %}
+                                <a class="btn btn-outline-light btn-lg" href="{{ path('equipe.index') }}">Gérer mon équipe</a>
+                        {% else %}
+                                <a class="btn btn-outline-light btn-lg" href="{{ path('user.register') }}">Créer un compte</a>
+                        {% endif %}
+                </div>
         </div>
-    </div>
-</div>
+
+        <div class="row text-center g-4">
+                <div class="col-md-4">
+                        <div class="card h-100 shadow-sm">
+                                <div class="card-body">
+                                        <h2 class="h4">Pokédex interactif</h2>
+                                        <p>Consultez les informations essentielles des premiers Pokémon et trouvez instantanément votre favori grâce à la recherche.</p>
+                                </div>
+                        </div>
+                </div>
+                <div class="col-md-4">
+                        <div class="card h-100 shadow-sm">
+                                <div class="card-body">
+                                        <h2 class="h4">Équipe personnalisée</h2>
+                                        <p>Inscrivez-vous, créez votre équipe de 6 Pokémon et optimisez vos statistiques pour briller en combat.</p>
+                                </div>
+                        </div>
+                </div>
+                <div class="col-md-4">
+                        <div class="card h-100 shadow-sm">
+                                <div class="card-body">
+                                        <h2 class="h4">Combat simulé</h2>
+                                        <p>Affrontez une équipe générée automatiquement et suivez le déroulement du combat tour par tour.</p>
+                                </div>
+                        </div>
+                </div>
+        </div>
 {% endblock %}

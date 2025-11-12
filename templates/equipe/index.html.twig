@@ -1,0 +1,86 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon équipe{% endblock %}
+
+{% block body %}
+        <div class="row justify-content-center">
+                <div class="col-lg-8">
+                        <h1 class="mb-4 text-center">Mon équipe Pokémon</h1>
+
+                        {% if teamForm %}
+                                <p class="lead text-center">Commencez par nommer votre équipe.</p>
+                                {{ form_start(teamForm) }}
+                                        {{ form_row(teamForm.nom) }}
+                                        <div class="d-grid">
+                                                <button class="btn btn-primary" type="submit">Créer mon équipe</button>
+                                        </div>
+                                {{ form_end(teamForm) }}
+                        {% else %}
+                                {% if equipe %}
+                                        <div class="card mb-4 shadow-sm">
+                                                <div class="card-body">
+                                                        <h2 class="card-title h4 text-center text-capitalize">{{ equipe.nom }}</h2>
+                                                        <p class="text-center text-muted">Créée le {{ equipe.createdAt|date('d/m/Y') }}</p>
+                                                </div>
+                                        </div>
+
+                                        {% if equipe.pokemonEquipes is not empty %}
+                                                <div class="row row-cols-1 row-cols-md-2 g-3 mb-4">
+                                                        {% for pokemon in equipe.pokemonEquipes %}
+                                                                <div class="col">
+                                                                        <div class="card h-100 shadow-sm">
+                                                                                <div class="card-body text-center">
+                                                                                        <img src="{{ pokemon.sprite }}" alt="{{ pokemon.pokemonName }}" class="img-fluid mb-3" style="max-height: 150px;" loading="lazy">
+                                                                                        <h3 class="h5 text-capitalize">#{{ pokemon.pokemonId }} - {{ pokemon.pokemonName }}</h3>
+                                                                                        {% if pokemon.surnom %}
+                                                                                                <p class="text-muted">Surnom : {{ pokemon.surnom }}</p>
+                                                                                        {% endif %}
+                                                                                        <ul class="list-inline">
+                                                                                                <li class="list-inline-item"><strong>PV :</strong> {{ pokemon.hp }}</li>
+                                                                                                <li class="list-inline-item"><strong>Attaque :</strong> {{ pokemon.attack }}</li>
+                                                                                                <li class="list-inline-item"><strong>Défense :</strong> {{ pokemon.defense }}</li>
+                                                                                                <li class="list-inline-item"><strong>Vitesse :</strong> {{ pokemon.speed }}</li>
+                                                                                        </ul>
+                                                                                </div>
+                                                                                <div class="card-footer bg-transparent">
+                                                                                        <form method="post" action="{{ path('equipe.pokemon_remove', {id: pokemon.id}) }}" onsubmit="return confirm('Retirer ce Pokémon de l\'équipe ?');">
+                                                                                                <input type="hidden" name="_token" value="{{ csrf_token('delete_pokemon_' ~ pokemon.id) }}">
+                                                                                                <button class="btn btn-sm btn-outline-danger w-100">Retirer</button>
+                                                                                        </form>
+                                                                                </div>
+                                                                        </div>
+                                                                </div>
+                                                        {% endfor %}
+                                                </div>
+                                        {% else %}
+                                                <p class="text-center text-muted">Votre équipe est vide, ajoutez votre premier Pokémon !</p>
+                                        {% endif %}
+
+                                        {% if equipe.pokemonEquipes|length < 6 %}
+                                                <div class="card shadow-sm">
+                                                        <div class="card-body">
+                                                                <h2 class="h5 mb-3">Ajouter un Pokémon</h2>
+                                                                {{ form_start(pokemonForm) }}
+                                                                        <div class="row g-2 align-items-end">
+                                                                                <div class="col-sm-4">
+                                                                                        {{ form_row(pokemonForm.pokemonId) }}
+                                                                                </div>
+                                                                                <div class="col-sm-8">
+                                                                                        {{ form_row(pokemonForm.surnom) }}
+                                                                                </div>
+                                                                        </div>
+                                                                        <div class="d-grid mt-3">
+                                                                                <button class="btn btn-success" type="submit">Ajouter à l'équipe</button>
+                                                                        </div>
+                                                                {{ form_end(pokemonForm) }}
+                                                                <p class="small text-muted mt-2">Vous pouvez ajouter jusqu'à 6 Pokémon dans votre équipe.</p>
+                                                        </div>
+                                                </div>
+                                        {% else %}
+                                                <div class="alert alert-info">Votre équipe est au complet !</div>
+                                        {% endif %}
+                                {% endif %}
+                        {% endif %}
+                </div>
+        </div>
+{% endblock %}
