@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ pokemon.name|capitalize }}{% endblock %}
+
+{% block body %}
+        <div class="py-4">
+                <a href="{{ path('pokedex.index') }}" class="btn btn-link mb-3">&larr; Retour au Pokédex</a>
+
+                <div class="card shadow-sm">
+                        <div class="row g-0 align-items-center">
+                                <div class="col-md-4 text-center p-4">
+                                        {% if artwork %}
+                                                <img src="{{ artwork }}" alt="{{ pokemon.name }}" class="img-fluid" loading="lazy">
+                                        {% else %}
+                                                <img src="{{ pokemon.sprites.front_default }}" alt="{{ pokemon.name }}" class="img-fluid" loading="lazy">
+                                        {% endif %}
+                                </div>
+                                <div class="col-md-8">
+                                        <div class="card-body">
+                                                <h1 class="card-title text-capitalize">#{{ pokemon.id }} - {{ pokemon.name }}</h1>
+                                                <p class="mb-2">
+                                                        {% for type in types %}
+                                                                <span class="badge bg-secondary text-uppercase me-1">{{ type }}</span>
+                                                        {% endfor %}
+                                                </p>
+                                                <p class="mb-3"><strong>Taille :</strong> {{ (pokemon.height / 10)|number_format(1) }} m</p>
+                                                <p class="mb-3"><strong>Poids :</strong> {{ (pokemon.weight / 10)|number_format(1) }} kg</p>
+
+                                                <h2 class="h4">Statistiques</h2>
+                                                <ul class="list-group list-group-flush">
+                                                        {% for stat in stats %}
+                                                                <li class="list-group-item d-flex justify-content-between align-items-center text-capitalize">
+                                                                        {{ stat.label|replace({'-': ' '}) }}
+                                                                        <span class="badge bg-primary rounded-pill">{{ stat.value }}</span>
+                                                                </li>
+                                                        {% endfor %}
+                                                </ul>
+                                        </div>
+                                </div>
+                        </div>
+                </div>
+        </div>
+{% endblock %}

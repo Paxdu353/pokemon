@@ -1,29 +1,44 @@
 <nav class="navbar navbar-expand-lg bg-body-tertiary" {attributes}>
-	<div class="container-fluid">
-		<a class="navbar-brand" href="{{ path('home.index') }}"><img src="{{ asset('img/logo.svg') }}" class="navbar-logo" style="width:100px;" alt="Tech Innov"></a>
-		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-			<span class="navbar-toggler-icon"></span>
-		</button>
-		<div class="collapse navbar-collapse" id="navbarSupportedContent">
-			<ul class="navbar-nav me-auto mb-2 mb-lg-0">
-				{% for link in links %}
-					<li class="nav-item">
-						<a class="nav-link" href="{{ path(link.path) }}">{{ link.label }}</a>
-					</li>
-				{% endfor %}
-				<li class="nav-item dropdown">
-					<a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-						News
-					</a>
-					<ul class="dropdown-menu">
-						{% for post in this.getPosts() %}
-							<li>
-								<a class="dropdown-item" href="{{ path('actu.show', { 'id': post.id }) }}">{{ post.title }}</a>
-							</li>
-						{% endfor %}
-					</ul>
-				</li>
-			</ul>
-		</div>
-	</div>
+        <div class="container-fluid">
+                <a class="navbar-brand" href="{{ path('home.index') }}">
+                        <img src="{{ asset('img/logo.svg') }}" class="navbar-logo" style="width:100px;" alt="PokeSymfony">
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                                {% for link in links %}
+                                        <li class="nav-item">
+                                                <a class="nav-link" href="{{ path(link.path) }}">{{ link.label }}</a>
+                                        </li>
+                                {% endfor %}
+                                {% if app.user %}
+                                        <li class="nav-item">
+                                                <a class="nav-link" href="{{ path('equipe.index') }}">Mon équipe</a>
+                                        </li>
+                                        <li class="nav-item">
+                                                <a class="nav-link" href="{{ path('combat.index') }}">Combat</a>
+                                        </li>
+                                {% endif %}
+                        </ul>
+                        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                                {% if app.user %}
+                                        <li class="nav-item">
+                                                <span class="navbar-text me-3">👋 Bonjour {{ app.user.pseudo }}</span>
+                                        </li>
+                                        <li class="nav-item">
+                                                <a class="nav-link" href="{{ path('app_logout') }}">Déconnexion</a>
+                                        </li>
+                                {% else %}
+                                        <li class="nav-item">
+                                                <a class="nav-link" href="{{ path('user.register') }}">Inscription</a>
+                                        </li>
+                                        <li class="nav-item">
+                                                <a class="nav-link" href="{{ path('app_login') }}">Connexion</a>
+                                        </li>
+                                {% endif %}
+                        </ul>
+                </div>
+        </div>
 </nav>
